@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ExampleTest {
 
     @Test
-    public void twoEqualsTwo() {
-        assertEquals(2, 2);
+    public void threeEqualsThree() {
+        assertEquals(3, 3);
     }
 }
