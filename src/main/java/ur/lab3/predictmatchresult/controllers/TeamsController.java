@@ -4,9 +4,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ur.lab3.predictmatchresult.domainobjects.datatransferobjects.FetchTeamData;
-import ur.lab3.predictmatchresult.domainobjects.datatransferobjects.MatchData;
 import ur.lab3.predictmatchresult.domainobjects.datatransferobjects.MatchesData;
-import ur.lab3.predictmatchresult.domainobjects.datatransferobjects.TeamData;
+import ur.lab3.predictmatchresult.domainobjects.datatransferobjects.FetchedTeam;
+import ur.lab3.predictmatchresult.domainobjects.models.Formation;
+import ur.lab3.predictmatchresult.easportsapi.exception.IncorrectTeamIdException;
 import ur.lab3.predictmatchresult.services.TeamsService;
 
 import java.util.List;
@@ -21,39 +22,67 @@ public class TeamsController {
         this.teamsService = teamsService;
     }
 
-    @GetMapping("/availibleToPredict")
-    public ResponseEntity<List<TeamData>> getTeamsAvailibleToPredict() {
-        var dataOfTeamsThatAreAvailibleToPredict
-                = teamsService.getDataOfTeamsThatAreAvailibleToPredict();
-
-        ResponseEntity<List<TeamData>> response =
-                new ResponseEntity<>(dataOfTeamsThatAreAvailibleToPredict, HttpStatus.OK);
-
-        return response;
-    }
-
     @GetMapping
-    public ResponseEntity<List<TeamData>> getAllTeams() {
-        return new ResponseEntity<>(teamsService.getAllTeams(), HttpStatus.OK);
-    }
+    public void fetchAll() { teamsService.fetchAllTeams(); }
 
     @PostMapping
-    public ResponseEntity<TeamData> fetchTeam(@RequestBody FetchTeamData fetchTeamData) throws InterruptedException {
-        Thread.sleep(5000L);
-        return new ResponseEntity<>(
-                new TeamData(
-                        1L,
-                        fetchTeamData.getTeamName(),
-                        "no link in mock"
-                ), HttpStatus.OK);
+    public ResponseEntity<FetchedTeam> fetchTeam(@RequestBody FetchTeamData fetchTeamData) {
+        try {
+            FetchedTeam fetchedTeam =
+                    teamsService.saveTeam(
+                            fetchTeamData.getFifaId(),
+                            fetchTeamData.getFormation()
+                    );
+            return new ResponseEntity<>(fetchedTeam, HttpStatus.CREATED);
+        } catch (IncorrectTeamIdException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
 
-    @PostMapping("/{teamId}/matches")
-    public ResponseEntity<?> addMatchesToTeam(
-            @PathVariable("teamId") Long teamId,
-            @RequestBody MatchesData matches) {
-
-        return ResponseEntity.ok(null);
+    @PostMapping("/matches")
+    public ResponseEntity<?> addMatchesToTeams(@RequestBody MatchesData matchesData) {
+        try {
+            teamsService.addMatches(matchesData.getHomeTeamId(), matchesData.getAwayTeamId(), matchesData.getMatches());
+        } catch (IncorrectTeamIdException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+
+
+
+
+
+
+
+
+
+
+
+//
+//    @GetMapping("/availibleToPredict")
+//    public ResponseEntity<List<FetchedTeam>> getTeamsAvailibleToPredict() {
+//        var dataOfTeamsThatAreAvailibleToPredict
+//                = teamsService.getDataOfTeamsThatAreAvailibleToPredict();
+//
+//        ResponseEntity<List<FetchedTeam>> response =
+//                new ResponseEntity<>(dataOfTeamsThatAreAvailibleToPredict, HttpStatus.OK);
+//
+//        return response;
+//    }
+//
+//    @GetMapping
+//    public ResponseEntity<List<FetchedTeam>> getAllTeams() {
+//        return new ResponseEntity<>(teamsService.getAllTeams(), HttpStatus.OK);
+//    }
+//
+//    @PostMapping("/{teamId}/matches")
+//    public ResponseEntity<?> addMatchesToTeam(
+//            @PathVariable("teamId") Long teamId,
+//            @RequestBody MatchesData matches) {
+//
+//        return ResponseEntity.ok(null);
+//    }
 
 }

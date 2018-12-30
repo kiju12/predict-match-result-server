@@ -1,32 +1,29 @@
 package ur.lab3.predictmatchresult.domainobjects.datatransferobjects;
 
+import ur.lab3.predictmatchresult.domainobjects.models.Formation;
+
 public class FetchTeamData {
 
-    private String idFromEADatebase;
-    private String teamName;
+    private Long fifaId;
+    private Formation formation;
 
     public FetchTeamData() {
     }
 
-    public FetchTeamData(String idFromEADatebase, String teamName) {
-        this.idFromEADatebase = idFromEADatebase;
-        this.teamName = teamName;
+    public Long getFifaId() {
+        return fifaId;
     }
 
-    public String getIdFromEADatebase() {
-        return idFromEADatebase;
+    public void setFifaId(Long fifaId) {
+        this.fifaId = fifaId;
     }
 
-    public void setIdFromEADatebase(String idFromEADatebase) {
-        this.idFromEADatebase = idFromEADatebase;
+    public Formation getFormation() {
+        return formation;
     }
 
-    public String getTeamName() {
-        return teamName;
-    }
-
-    public void setTeamName(String teamName) {
-        this.teamName = teamName;
+    public void setFormation(Formation formation) {
+        this.formation = formation;
     }
 }
 

@@ -1,7 +1,6 @@
 package ur.lab3.predictmatchresult.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,10 +23,6 @@ public class PredictsController {
     @GetMapping
     public ResponseEntity<PredictResult> whoWin(@RequestParam("homeTeamId") Long homeTeamId,
                                                 @RequestParam("awayTeamId") Long awayTeamId) {
-
-        ResponseEntity response =
-                new ResponseEntity(predictService.whoWin(homeTeamId, awayTeamId), HttpStatus.OK);
-
-        return response;
+        return ResponseEntity.ok(new PredictResult(predictService.whoWin(homeTeamId, awayTeamId)));
     }
 }

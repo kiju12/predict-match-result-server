@@ -3,43 +3,31 @@ package ur.lab3.predictmatchresult.domainobjects.datatransferobjects;
 import java.util.Date;
 
 public class MatchData {
-    private Long oppositeTeamId;
-    private int oppositeTeamGoals;
-    private int teamGoals;
-    private Date date;
+    private Integer homeGoals;
+    private Integer awayGoals;
+
+    public MatchData(Integer homeGoals, Integer awayGoals, Date dateOfMatch) {
+        this.homeGoals = homeGoals;
+        this.awayGoals = awayGoals;
+    }
 
     public MatchData() {
     }
 
-    public Long getOppositeTeamId() {
-        return oppositeTeamId;
+    public Integer getHomeGoals() {
+        return homeGoals;
     }
 
-    public void setOppositeTeamId(Long oppositeTeamId) {
-        this.oppositeTeamId = oppositeTeamId;
+    public void setHomeGoals(Integer homeGoals) {
+        this.homeGoals = homeGoals;
     }
 
-    public int getOppositeTeamGoals() {
-        return oppositeTeamGoals;
+    public Integer getAwayGoals() {
+        return awayGoals;
     }
 
-    public void setOppositeTeamGoals(int oppositeTeamGoals) {
-        this.oppositeTeamGoals = oppositeTeamGoals;
+    public void setAwayGoals(Integer awayGoals) {
+        this.awayGoals = awayGoals;
     }
 
-    public int getTeamGoals() {
-        return teamGoals;
-    }
-
-    public void setTeamGoals(int teamGoals) {
-        this.teamGoals = teamGoals;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
 }

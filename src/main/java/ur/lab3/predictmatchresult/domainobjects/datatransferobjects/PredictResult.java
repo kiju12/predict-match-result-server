@@ -1,23 +1,23 @@
 package ur.lab3.predictmatchresult.domainobjects.datatransferobjects;
 
-import ur.lab3.predictmatchresult.domainobjects.models.WhoWinMatchPredictResult;
+import ur.lab3.predictmatchresult.domainobjects.models.MatchResult;
 
 public class PredictResult {
-    private WhoWinMatchPredictResult result;
+    private MatchResult result;
 
     public PredictResult() {
-        result = WhoWinMatchPredictResult.I_DONT_KNOW;
+//        result = MatchResult.I_DONT_KNOW;
     }
 
-    public PredictResult(WhoWinMatchPredictResult result) {
+    public PredictResult(MatchResult result) {
         this.result = result;
     }
 
-    public WhoWinMatchPredictResult getResult() {
+    public MatchResult getResult() {
         return result;
     }
 
-    public void setResult(WhoWinMatchPredictResult result) {
+    public void setResult(MatchResult result) {
         this.result = result;
     }
 }
