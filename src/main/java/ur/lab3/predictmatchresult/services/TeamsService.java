@@ -1,9 +1,10 @@
 package ur.lab3.predictmatchresult.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ur.lab3.predictmatchresult.domainobjects.datatransferobjects.FetchedTeam;
-import ur.lab3.predictmatchresult.domainobjects.datatransferobjects.MatchData;
+import ur.lab3.predictmatchresult.domainobjects.datatransferobjects.*;
 import ur.lab3.predictmatchresult.domainobjects.models.*;
 import ur.lab3.predictmatchresult.easportsapi.exception.IncorrectTeamIdException;
 import ur.lab3.predictmatchresult.repository.mock.MatchRepository;
@@ -150,5 +151,48 @@ public class TeamsService {
 
     public Long getAwayTeamIdOfMatch(Long matchId) {
         return matchRepository.getAwayTeamIdOfMatch(matchId);
+    }
+
+    public List<TeamDTO> getTeamsAvailibleToPredict() {
+        List<Team> teams = teamRepository.findAllByHasMatches();
+        ArrayList<TeamDTO> teamDTOS = new ArrayList<>();
+
+        ModelMapper mapper = new ModelMapper();
+        teams.stream().forEach(team -> teamDTOS.add(mapper.map(team, TeamDTO.class)));
+
+        teamDTOS.forEach(teamDTO -> {
+            List<PlayerDTO> players = teamDTO.getPlayers();
+            teamDTO.setPlayers(players.stream().sorted((p1, p2) -> {
+                int p1Weight = getPositionSortWeight(p1.getPosition());
+                int p2Weight = getPositionSortWeight(p2.getPosition());
+
+                if (p1Weight > p2Weight)
+                    return -1;
+                else if (p1Weight < p2Weight)
+                    return 1;
+                else if (p1.getRating() > p2.getRating())
+                    return -1;
+                else if (p1.getRating() < p2.getRating())
+                    return 1;
+                else return 0;
+
+            }).collect(Collectors.toList()));
+        });
+        return teamDTOS;
+    }
+
+    public int getPositionSortWeight(Position pos) {
+        switch (pos) {
+            case GOALKEEPER: return 2;
+            case DEFENCE: return 3;
+            case HELP: return 4;
+            case ATTACK: return 5;
+            default: return 1;
+        }
+
+    }
+
+    public List<TeamNameDTO> getTeamNames() {
+        return teamRepository.findAllNames();
     }
 }

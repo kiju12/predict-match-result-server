@@ -3,9 +3,7 @@ package ur.lab3.predictmatchresult.controllers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ur.lab3.predictmatchresult.domainobjects.datatransferobjects.FetchTeamData;
-import ur.lab3.predictmatchresult.domainobjects.datatransferobjects.MatchesData;
-import ur.lab3.predictmatchresult.domainobjects.datatransferobjects.FetchedTeam;
+import ur.lab3.predictmatchresult.domainobjects.datatransferobjects.*;
 import ur.lab3.predictmatchresult.domainobjects.models.Formation;
 import ur.lab3.predictmatchresult.easportsapi.exception.IncorrectTeamIdException;
 import ur.lab3.predictmatchresult.services.TeamsService;
@@ -22,8 +20,8 @@ public class TeamsController {
         this.teamsService = teamsService;
     }
 
-    @GetMapping
-    public void fetchAll() { teamsService.fetchAllTeams(); }
+//    @GetMapping
+//    public void fetchAll() { teamsService.fetchAllTeams(); }
 
     @PostMapping
     public ResponseEntity<FetchedTeam> fetchTeam(@RequestBody FetchTeamData fetchTeamData) {
@@ -50,8 +48,15 @@ public class TeamsController {
     }
 
 
+    @GetMapping
+    public ResponseEntity<List<TeamDTO>> getTeamsAvailibleToPredict() {
+        return ResponseEntity.ok(teamsService.getTeamsAvailibleToPredict());
+    }
 
-
+    @GetMapping("/names")
+    public ResponseEntity<List<TeamNameDTO>> getTeamNames() {
+        return ResponseEntity.ok(teamsService.getTeamNames());
+    }
 
 
 

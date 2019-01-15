@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import ur.lab3.predictmatchresult.domainobjects.datatransferobjects.TeamDTO;
+import ur.lab3.predictmatchresult.domainobjects.datatransferobjects.TeamNameDTO;
 import ur.lab3.predictmatchresult.domainobjects.models.Player;
 import ur.lab3.predictmatchresult.domainobjects.models.Team;
 import ur.lab3.predictmatchresult.domainobjects.models.TeamWar;
@@ -26,6 +28,13 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
 
     @Query("SELECT T.formation FROM Team T where T.id = :teamId")
     String getFormationOfTeam(@Param("teamId") Long teamId);
+
+    @Query("SELECT T FROM Team T where T.wars.size > 0")
+    List<Team> findAllByHasMatches();
+
+    @Query("SELECT T.id as id, T.name as name FROM Team T")
+    List<TeamNameDTO> findAllNames();
+
 
 //    @Query("SELECT P FROM Player P WHERE P.team.id = :teamId")
 //    Set<Player> findPlayersByTeamId(@Param("teamId") Long teamId);
